@@ -69,7 +69,7 @@ const getNoteById = async (model: any, req: any, res: any) => {
     });
   }
 
-  await model?.findById(id)?.then((data: any) => {
+  await model?.findById(id)?.populate("category")?.populate("tag")?.then((data: any) => {
     res?.status(200)?.json({
       data,
     });
@@ -82,7 +82,7 @@ const getNoteById = async (model: any, req: any, res: any) => {
  * @access Private
  */
 const getNotes = async (model: any, _: any, res: any) => {
-  await model?.find({})?.then((data: any) => {
+  await model?.find({})?.populate("category")?.populate("tag")?.then((data: any) => {
     res?.status(200)?.json({
       data,
     });
@@ -90,7 +90,7 @@ const getNotes = async (model: any, _: any, res: any) => {
 };
 
 const deleteNote = asyncHandler(async (req: any, res: any) => {
-  const {id} = req.query
+  const {id} = req.params
 
   if (!id) {
     return res?.status(400)?.json({
