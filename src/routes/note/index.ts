@@ -18,7 +18,7 @@ router.get("/api/note", (req: any, res: any) =>
 
 router.put("/api/note/update", updateNote);
 router.post("/api/note/create", createNote);
-router.delete("/api/note/delete", deleteNote);
+router.delete("/api/note/delete/:id", deleteNote);
 
 const noteRoutes = router;
 export { noteRoutes };
