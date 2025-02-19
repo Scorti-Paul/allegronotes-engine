@@ -10,6 +10,12 @@ const NoteSchema = new Schema(
       type: SchemaTypes.String,
       required: [true, "Provide note content"],
     },
+    category: {
+      type: SchemaTypes.ObjectId, ref: "Category"
+    },
+    tag: {
+      type: SchemaTypes.ObjectId, ref: "Tag"
+    },
   },
   { timestamps: true }
 );
