@@ -8,6 +8,8 @@ require("dotenv").config();
 
 import { userRoutes } from "./routes/user";
 import { noteRoutes } from "./routes/note";
+import { categoryRoutes } from "./routes/category";
+import { tagRoutes } from "./routes/tag";
 
 const app = express();
 const PORT = process.env.PORT || 3500;
@@ -25,6 +27,8 @@ app.get("/api", (_: any, res: any) => {
 
 app.use(userRoutes);
 app.use(noteRoutes);
+app.use(categoryRoutes);
+app.use(tagRoutes);
 
 
 app.listen(PORT, () => {
