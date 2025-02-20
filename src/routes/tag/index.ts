@@ -19,9 +19,9 @@ router.get("/api/tag", (req: any, res: any) =>
   getTagById(TagModel, req, res)
 );
 
-router.put("/api/tag/update", updateTag);
-router.post("/api/tag/create", createTag);
-router.delete("/api/tag/delete/:id", deleteTag);
+router.put("/api/tag/:id", updateTag);
+router.post("/api/tag", createTag);
+router.delete("/api/tag/:id", deleteTag);
 
 const tagRoutes = router;
 export { tagRoutes };

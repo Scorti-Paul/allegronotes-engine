@@ -30,8 +30,9 @@ const updateNote = asyncHandler(async (req: any, res: any) => {
       message: "Data to update cannot be empty",
     });
   }
+  const {id} = req.params
 
-  const { id, ...rest } = req.body;
+  const { ...rest } = req.body;
 
   if (!id) {
     return res.status(400)?.json({
@@ -61,7 +62,7 @@ const updateNote = asyncHandler(async (req: any, res: any) => {
  * @access Private
  */
 const getNoteById = async (model: any, req: any, res: any) => {
-  const { id } = req?.query;
+  const { id } = req?.params;
 
   if (!id) {
     return res?.status(400)?.json({

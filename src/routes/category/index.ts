@@ -19,9 +19,9 @@ router.get("/api/category", (req: any, res: any) =>
   getCategoryById(CategoryModel, req, res)
 );
 
-router.put("/api/category/update", updateCategory);
-router.post("/api/category/create", createCategory);
-router.delete("/api/category/delete/:id", deleteCategory);
+router.put("/api/category/:id", updateCategory);
+router.post("/api/category", createCategory);
+router.delete("/api/category/:id", deleteCategory);
 
 const categoryRoutes = router;
 export { categoryRoutes };

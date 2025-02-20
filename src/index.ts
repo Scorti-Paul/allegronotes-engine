@@ -6,7 +6,6 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
-import { userRoutes } from "./routes/user";
 import { noteRoutes } from "./routes/note";
 import { categoryRoutes } from "./routes/category";
 import { tagRoutes } from "./routes/tag";
@@ -25,11 +24,9 @@ app.get("/api", (_: any, res: any) => {
   res.send("Welcome");
 });
 
-app.use(userRoutes);
 app.use(noteRoutes);
 app.use(categoryRoutes);
 app.use(tagRoutes);
-
 
 app.listen(PORT, () => {
   console.log(`...server running on port ${PORT}`);
