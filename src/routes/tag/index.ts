@@ -1,7 +1,7 @@
 import {
   createTag,
   deleteTag,
-  getCategories,
+  getTags,
   getTagById,
   updateTag,
 } from "../../controllers/tag";
@@ -12,7 +12,7 @@ const express = require("express");
 const router = express?.Router();
 
 router.get("/api/tags", (req: any, res: any) =>
-  getCategories(TagModel, req, res)
+  getTags(TagModel, req, res)
 );
 
 router.get("/api/tag", (req: any, res: any) =>

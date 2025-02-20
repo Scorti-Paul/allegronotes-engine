@@ -91,7 +91,7 @@ const getTagById = async (model: any, req: any, res: any) => {
  * @route api/categories
  * @access Private
  */
-const getCategories = async (model: any, _: any, res: any) => {
+const getTags = async (model: any, _: any, res: any) => {
   await model?.find({})?.then((data: any) => {
     res?.status(200)?.json({
       data,
@@ -115,4 +115,4 @@ const deleteTag = expressAsyncHandler(async (req: any, res: any) => {
 })
 
 
-export { createTag, updateTag, getTagById, getCategories,deleteTag };
+export { createTag, updateTag, getTagById, getTags,deleteTag };
