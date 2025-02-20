@@ -2,4 +2,3 @@
 /dist
 /.yarn
 .env
-yarn.lock
