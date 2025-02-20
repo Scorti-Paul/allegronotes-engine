@@ -103,4 +103,67 @@ const deleteNote = asyncHandler(async (req: any, res: any) => {
   res.json({ message: "Note deleted" });
 })
 
-export { createNote, updateNote, getNoteById, getNotes, deleteNote };
+// const filterNotes = async (model: any, req: any, res: any) => {
+//   const { search = {}, ...query } = req.body;
+//   console.log(search)
+//   const key = search ? Object.keys(search)[0] : "";
+//   const value = search ? Object.values(search)[0] : undefined;
+//  console.log("Typeof: " + typeof(key))
+//   try {
+//     const notes = await model
+//       .find({
+//         ...query,
+//         [`${key}`]: { $regex: value, $options: "i" },
+//       })
+//       ?.exec();
+
+//     if (!notes || notes.length === 0) {
+//       return res.status(404).send("No notes found");
+//     }
+//   } catch (error) {
+//     console.error("Error generating Excel:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+const filterNotes = async (model: any, req: any, res: any) => {
+  try {
+    const { search = {}, ...query } = req.body;
+    console.log("Search Object:", search);
+
+    // Get search key and value
+    const key = Object.keys(search)[0] || "";
+    let value = Object.values(search)[0];
+
+    console.log("Typeof key:", typeof key);
+    console.log("Typeof value before conversion:", typeof value);
+
+    // Ensure value is a string
+    if (value !== undefined && value !== null) {
+      value = String(value);
+    } else {
+      value = "";
+    }
+
+    console.log("Typeof value after conversion:", typeof value, "Value:", value);
+
+    const notes = await model
+      .find({
+        ...query,
+        [key]: { $regex: value, $options: "i" },
+      })
+      .exec();
+
+    if (!notes || notes.length === 0) {
+      return res.status(404).send("No notes found");
+    }
+
+    res.json(notes);
+  } catch (error) {
+    console.error("Error filtering notes:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
+export { createNote, updateNote, getNoteById, getNotes, deleteNote, filterNotes };
