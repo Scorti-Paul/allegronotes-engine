@@ -30,7 +30,7 @@ const updateNote = asyncHandler(async (req: any, res: any) => {
       message: "Data to update cannot be empty",
     });
   }
-  const {id} = req.params
+  const { id } = req.params;
 
   const { ...rest } = req.body;
 
@@ -70,11 +70,15 @@ const getNoteById = async (model: any, req: any, res: any) => {
     });
   }
 
-  await model?.findById(id)?.populate("category")?.populate("tag")?.then((data: any) => {
-    res?.status(200)?.json({
-      data,
+  await model
+    ?.findById(id)
+    ?.populate("category")
+    ?.populate("tag")
+    ?.then((data: any) => {
+      res?.status(200)?.json({
+        data,
+      });
     });
-  });
 };
 
 /**
@@ -83,15 +87,19 @@ const getNoteById = async (model: any, req: any, res: any) => {
  * @access Private
  */
 const getNotes = async (model: any, _: any, res: any) => {
-  await model?.find({})?.populate("category")?.populate("tag")?.then((data: any) => {
-    res?.status(200)?.json({
-      data,
+  await model
+    ?.find({})
+    ?.populate("category")
+    ?.populate("tag")
+    ?.then((data: any) => {
+      res?.status(200)?.json({
+        data,
+      });
     });
-  });
 };
 
 const deleteNote = asyncHandler(async (req: any, res: any) => {
-  const {id} = req.params
+  const { id } = req.params;
 
   if (!id) {
     return res?.status(400)?.json({
@@ -99,8 +107,52 @@ const deleteNote = asyncHandler(async (req: any, res: any) => {
     });
   }
 
-  await NoteModal.findByIdAndDelete({_id: id});
+  await NoteModal.findByIdAndDelete({ _id: id });
   res.json({ message: "Note deleted" });
-})
+});
 
-export { createNote, updateNote, getNoteById, getNotes, deleteNote };
+const filterNotes = async (model: any, req: any, res: any) => {
+  console.log(req?.params);
+  try {
+    let data;
+    const { category, tag } = req.params;
+    if (category && tag) {
+      data = await model
+        .find({
+          category,
+          tag,
+        })
+        ?.exec();
+    } else if (category) {
+      data = await model
+        .find({
+          category,
+        })
+        ?.exec();
+    } else if (tag) {
+      data = await model
+        .find({
+          tag,
+        })
+        ?.exec();
+    }
+
+    if (!data || data.length === 0) {
+      return res.status(404).send("No notes found");
+    }
+    res?.status(200)?.json({
+      data,
+    });
+  } catch (error) {
+    return res.status(400).send("Something went wrong when filtering...");
+  }
+};
+
+export {
+  createNote,
+  updateNote,
+  getNoteById,
+  getNotes,
+  deleteNote,
+  filterNotes,
+};
