@@ -30,7 +30,7 @@ const updateNote = asyncHandler(async (req: any, res: any) => {
       message: "Data to update cannot be empty",
     });
   }
-  const {id} = req.params
+  const { id } = req.params;
 
   const { ...rest } = req.body;
 
@@ -70,11 +70,15 @@ const getNoteById = async (model: any, req: any, res: any) => {
     });
   }
 
-  await model?.findById(id)?.populate("category")?.populate("tag")?.then((data: any) => {
-    res?.status(200)?.json({
-      data,
+  await model
+    ?.findById(id)
+    ?.populate("category")
+    ?.populate("tag")
+    ?.then((data: any) => {
+      res?.status(200)?.json({
+        data,
+      });
     });
-  });
 };
 
 /**
@@ -83,15 +87,19 @@ const getNoteById = async (model: any, req: any, res: any) => {
  * @access Private
  */
 const getNotes = async (model: any, _: any, res: any) => {
-  await model?.find({})?.populate("category")?.populate("tag")?.then((data: any) => {
-    res?.status(200)?.json({
-      data,
+  await model
+    ?.find({})
+    ?.populate("category")
+    ?.populate("tag")
+    ?.then((data: any) => {
+      res?.status(200)?.json({
+        data,
+      });
     });
-  });
 };
 
 const deleteNote = asyncHandler(async (req: any, res: any) => {
-  const {id} = req.params
+  const { id } = req.params;
 
   if (!id) {
     return res?.status(400)?.json({
@@ -99,71 +107,52 @@ const deleteNote = asyncHandler(async (req: any, res: any) => {
     });
   }
 
-  await NoteModal.findByIdAndDelete({_id: id});
+  await NoteModal.findByIdAndDelete({ _id: id });
   res.json({ message: "Note deleted" });
-})
-
-// const filterNotes = async (model: any, req: any, res: any) => {
-//   const { search = {}, ...query } = req.body;
-//   console.log(search)
-//   const key = search ? Object.keys(search)[0] : "";
-//   const value = search ? Object.values(search)[0] : undefined;
-//  console.log("Typeof: " + typeof(key))
-//   try {
-//     const notes = await model
-//       .find({
-//         ...query,
-//         [`${key}`]: { $regex: value, $options: "i" },
-//       })
-//       ?.exec();
-
-//     if (!notes || notes.length === 0) {
-//       return res.status(404).send("No notes found");
-//     }
-//   } catch (error) {
-//     console.error("Error generating Excel:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
+});
 
 const filterNotes = async (model: any, req: any, res: any) => {
+  console.log(req?.params);
   try {
-    const { search = {}, ...query } = req.body;
-    console.log("Search Object:", search);
-
-    // Get search key and value
-    const key = Object.keys(search)[0] || "";
-    let value = Object.values(search)[0];
-
-    console.log("Typeof key:", typeof key);
-    console.log("Typeof value before conversion:", typeof value);
-
-    // Ensure value is a string
-    if (value !== undefined && value !== null) {
-      value = String(value);
-    } else {
-      value = "";
+    let data;
+    const { category, tag } = req.params;
+    if (category && tag) {
+      data = await model
+        .find({
+          category,
+          tag,
+        })
+        ?.exec();
+    } else if (category) {
+      data = await model
+        .find({
+          category,
+        })
+        ?.exec();
+    } else if (tag) {
+      data = await model
+        .find({
+          tag,
+        })
+        ?.exec();
     }
 
-    console.log("Typeof value after conversion:", typeof value, "Value:", value);
-
-    const notes = await model
-      .find({
-        ...query,
-        [key]: { $regex: value, $options: "i" },
-      })
-      .exec();
-
-    if (!notes || notes.length === 0) {
+    if (!data || data.length === 0) {
       return res.status(404).send("No notes found");
     }
-
-    res.json(notes);
+    res?.status(200)?.json({
+      data,
+    });
   } catch (error) {
-    console.error("Error filtering notes:", error);
-    res.status(500).send("Internal Server Error");
+    return res.status(400).send("Something went wrong when filtering...");
   }
 };
 
-
-export { createNote, updateNote, getNoteById, getNotes, deleteNote, filterNotes };
+export {
+  createNote,
+  updateNote,
+  getNoteById,
+  getNotes,
+  deleteNote,
+  filterNotes,
+};
