@@ -112,17 +112,15 @@ const deleteNote = asyncHandler(async (req: any, res: any) => {
 });
 
 const filterNotes = async (model: any, req: any, res: any) => {
-  console.log(req?.params);
   try {
     const { category, tag } = req.params;
     let query: any = {};
 
     if (category) query.category = category;
     if (tag) query.tag = tag;
+
     const data = await model
-      .find({
-        query,
-      })
+      .find(query)
       ?.exec();
 
     if (!data || data.length === 0) {
