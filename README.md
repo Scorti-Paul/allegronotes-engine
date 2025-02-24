@@ -123,7 +123,7 @@ project-folder/
 - **Type**: TypeScript
 
 ## 6. API Documentation
-Deployed API on Render: http://localhost:3500/api
+API Endpoints: http://localhost:3500/api
 
 ***Examples:***   
   Full Link to get all Notes: http://localhost:3500/api/notes
